@@ -1,7 +1,12 @@
 {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "browser": true,
+        "commonjs": true,
+        "jquery": true,
+        "webextensions": true,
+        "mocha": true
     },
     "extends": "eslint:recommended",
     "globals": {

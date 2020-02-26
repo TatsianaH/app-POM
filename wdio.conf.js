@@ -1,23 +1,28 @@
 exports.config = {
+    //
 
     runner: 'local',
-
+    //
     specs: [
-        './test/specs/**/*.js'
+        './test/specs/**/*.spec.js'
     ],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
     ],
-
+    //
+    //
     maxInstances: 10,
-
+    //
     capabilities: [{
 
         maxInstances: 1,
         //
         browserName: 'chrome',
-
+        // If outputDir is provided WebdriverIO can capture driver session logs
+        // it is possible to configure which logTypes to include/exclude.
+        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+        // excludeDriverLogs: ['bugreport', 'server'],
     }],
     //
     // ===================
@@ -50,7 +55,7 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'https://stage.pasv.us/',
+    baseUrl: 'http://localhost:3006/',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
