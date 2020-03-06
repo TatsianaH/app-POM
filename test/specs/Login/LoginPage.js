@@ -2,7 +2,7 @@ import Page from '../Page';
 
 class LoginPage extends Page {
     open() {
-        super.open('http://localhost:3006/user/login');
+        super.open('https://stage.pasv.us/user/login');
     }
 
     get emailField() {

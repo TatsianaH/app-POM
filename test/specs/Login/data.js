@@ -1,5 +1,5 @@
 const data = {
-    email: 'adminNew@admin.admin',
+    email: 'admin@admin.admin',
     password: '123123',
 };
 
