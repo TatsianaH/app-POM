@@ -22,10 +22,3 @@ steps:
 - script: |
     npm t
   displayName: 'npm test'
-
-schedules:
-  - cron: "33 * * * *"
-    displayName: Daily midnight build
-    branches:
-      include:
-        - master
