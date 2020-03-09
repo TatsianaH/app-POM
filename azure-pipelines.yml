@@ -22,3 +22,10 @@ steps:
 - script: |
     npm t
   displayName: 'npm test'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '/Users/tatsianahantsevich/Documents/Project_QA4/app-POM/test/specs/Register/register.spec.js'
+    arguments: 'wdio wdio.conf.js'
+    testRunTitle: 'Smoke'
