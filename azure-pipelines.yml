@@ -23,9 +23,9 @@ steps:
     npm t
   displayName: 'npm test'
 
+# do this after other tasks such as building
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'test'
-    projects: 'https://github.com/TatsianaH/app-POM/test/specs/Register/register.spec.js'
-    arguments: 'wdio wdio.conf.js'
-    testRunTitle: 'Smoke'
+    command: test
+    projects: '*/test/specs/Register/register.spec.js'
+    arguments: '--configuration $(buildConfiguration)'
