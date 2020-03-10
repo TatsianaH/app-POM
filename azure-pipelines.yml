@@ -22,9 +22,3 @@ steps:
 - script: |
     npm t
   displayName: 'npm test'
-
-# do this after other tasks such as building
-- task: Bash@3
-  inputs:
-    filePath: '**/test/specs/Register/register.spec.js'
-    arguments: '--configuration $(buildConfiguration)'
