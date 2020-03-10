@@ -7,7 +7,8 @@
     "test": "wdio wdio.conf.js",
     "testAndReport": "npm run clean && wdio wdio.conf.js && npm run report",
     "report": "allure generate --clean && allure open",
-    "clean": "rm -rf allure-results"
+    "clean": "rm -rf allure-results",
+    "rest": "wdio wdio.conf.js --spec test/specs/webstaurant.spec.js --inspect"
   },
   "author": "Tatsiana Hantsevich",
   "license": "ISC",
