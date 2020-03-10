@@ -24,8 +24,7 @@ steps:
   displayName: 'npm test'
 
 # do this after other tasks such as building
-- task: DotNetCoreCLI@2
+- task: Bash@3
   inputs:
-    command: test
-    projects: '*/test/specs/Register/register.spec.js'
+    filePath: '**/test/specs/Register/register.spec.js'
     arguments: '--configuration $(buildConfiguration)'
