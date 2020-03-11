@@ -2,8 +2,9 @@ import {expect} from 'chai';
 
 const searchValue = 'stainless work table';
 let lastItem = null;
+let modalWindow = null;
 
-describe('Steel table', () => {
+describe('Webstrauntstore_FIND_LAS_ITEM', () => {
   it('should open home page', () => {
     browser.url('https://www.webstaurantstore.com/');
     const title = browser.getTitle();
@@ -28,61 +29,79 @@ describe('Steel table', () => {
   });
 
   //div[@class="details"]//a
-  it('should check a list of search results without titles', () => {
-    const listResultsFromTitles = $$('//div[@class="details"]//a');
-    //console.log(listResultsFromTitles.map(el => el.getText()), '========');
-    expect(listResultsFromTitles.map(el => el.getText()).every(el => el.includes('Table') || el.includes('Tables')));
-  });
+  // it('should check a list of search results without titles', () => {
+  //   const listResultsFromTitles = $$('//div[@class="details"]/a[@class="description"]');
+  //   //console.log(listResultsFromTitles.map(el => el.getText()), '========');
+  //   expect(listResultsFromTitles.map(el => el.getText()).every(el => el.includes('Table') || el.includes('Tables')));
+  // });
 
-  for (let i = 2; i <= 9; i++) {
+  for (let i = 1; i <= 9; i++) {
     it(`should get to the next page num ${i}`, () => {
-      //div[@id="paging"]/div/ul/li
-      const selNextPage = $(`//div[@id="paging"]//a[text()="${i}"]`);
-      selNextPage.click();
-      const pageNext = $('//div[@id="paging"]//li[@class="active"]');
-      pageNext.waitForDisplayed();
-      expect(pageNext.getText()).eq(`${i}`);
-      //browser.pause(2000);
+      if(i > 1){
+        const selNextPage = $(`//div[@id="paging"]//a[text()="${i}"]`);
+        selNextPage.click();
+        const pageNext = $('//div[@id="paging"]//li[@class="active"]');
+        pageNext.waitForDisplayed();
+        expect(pageNext.getText()).eq(`${i}`);
+        //browser.pause(2000);
+      }
     });
 
     it('should check a list of search results without titles', () => {
       const listResultsFromTitles = $$('//div[@class="details"]/a[@class="description"]');
-      //console.log(listResultsFromTitles.map(el => el.getText()), '========');
+      lastItem = listResultsFromTitles[listResultsFromTitles.length - 1].getText();
       expect(listResultsFromTitles.map(el => el.getText()).every(el => el.includes('Table') || el.includes('Tables')));
     });
   }
 
   it('should get last item with `table` from search results list and click `Add To Cart` button', () => {
-    const listResultsFromTitles = $$('//div[@class="details"]/a[@class="description"]');
-    lastItem = listResultsFromTitles[listResultsFromTitles.length - 1].getText();
 
     //how check that it is the last item
     const addToCartBtnList = $$('//input[@name="addToCartButton"]');
     const addToCartBtnLast = addToCartBtnList[addToCartBtnList.length - 1];
     addToCartBtnLast.click();
-    // const modalWindow = $('//div[@class="modal-scrollable"]');
-    // modalWindow.isDisplayed();
-    // const h3Title = $('//h3[@id="myModalLabel"]').getText();
-    // expect(lastItem).includes(h3Title);
+    modalWindow = $('//div[@id="ag-sub-grid"]');
   });
 
-  // it('should fill all options for the item in modal window', () => {
-  //   const field1 = $('//select[@title="Countertop Edge"]');
-  //
-  //   const field2 = $('//select[@title="Finish Upgrade"]');
-  //   const field3 = $('//select[@title="Sink Bowl"]');
-  //   field1.click();
-  //   field1.selectByVisibleText('Advance Tabco TA-12 Countertop Edge');
-  //   field2.click();
-  //   field2.selectByVisibleText('Advance Tabco K-350 Upgraded Finish');
-  //   field3.click();
-  //   field3.selectByVisibleText('Advance Tabco TA-11B 16" x 20" Sink Bowl with Faucet, Welded into Tabletop');
-  //   const addToCartButton = $('//button[@name="addToCartButton"]');
-  //   addToCartButton.click();
-  // });
+  //if (modalWindow) {
+  it('should check equality of modal window title', () => {
+    modalWindow.isDisplayed();
+   // const h3Title = $('//h3[@id="myModalLabel"]').getText();
+   // expect(lastItem).includes(h3Title);
+  });
+    
+  it('should fill all options for the item in modal window', () => {
+    const field1 = $('//select[@title="Countertop Edge"]');
+
+    const field2 = $('//select[@title="Finish Upgrade"]');
+    const field3 = $('//select[@title="Sink Bowl"]');
+    field1.click();
+    field1.selectByIndex(1);
+    field2.click();
+    field2.selectByIndex(1);
+    field3.click();
+    field3.selectByIndex(1);
+    // field2.selectByVisibleText('Advance Tabco K-350 Upgraded Finish');
+    // field3.selectByVisibleText('Advance Tabco TA-11B 16" x 20" Sink Bowl with Faucet, Welded into Tabletop');
+    const addToCartButton = $('//button[@name="addToCartButton"]');
+    addToCartButton.click();
+  });
+  //  }
+
+  it('should check that the pop-up message appears', () => {
+    const message = $('//div[@id="notification12010707"]');
+    message.isDisplayed();
+    const closeBtn = $('//div[@class="notification-center"]/button[@class="close"]');
+    closeBtn.click();
+    // const viewCartBtn = $('//div[@id="notification12010707"]/div/a[text()="View Cart"]');
+    // viewCartBtn.click();
+    // expect($('//h1').getText()).eq('Cart');
+  });
 
   it('should redirect user to Cart Page', () => {
-    const cartBtn = $('//a[@class="menu-btn"]//span[text()="Cart"]');
+    //
+    // //a[@class="menu-btn"]//span[text()="Cart"]
+    const cartBtn = $('//a[@aria-label="Your cart has 0 items. View your cart."]');
     cartBtn.click();
     expect($('//h1').getText()).eq('Cart');
   });
@@ -100,21 +119,4 @@ describe('Steel table', () => {
     messageEmptyCard.waitForDisplayed();
     expect(messageEmptyCard.getText()).eq('Your cart is empty.');
   });
-
-
-
-  // it('should get to the next page', () => {
-  //   //div[@id="paging"]/div/ul/li
-  //   const selNextPage = $('//div[@id="paging"]//a[text()="2"]');
-  //   selNextPage.click();
-  //   const page2 = $('//div[@id="paging"]//li[@class="active"]');
-  //   page2.waitForDisplayed();
-  //   expect(page2.getText()).eq('2');
-  // });
-
-  // it('should check a list of search results without titles', () => {
-  //   const listResultsFromTitles = $$('//div[@class="details"]//a');
-  //   //console.log(listResultsFromTitles.map(el => el.getText()), '========');
-  //   expect(listResultsFromTitles.map(el => el.getText()).every(el => el.includes('Table') || el.includes('Tables')));
-  // });
 });
