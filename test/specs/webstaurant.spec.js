@@ -3,8 +3,8 @@ import {expect} from 'chai';
 const sel = {
   inputSearch: '//input[@id="searchval"]',
   btnSearch: '//button[@value="Search"]',
-  inH1SelText: '//h1/span[text()="Stainless Work Table"]',
-  listResultsFromTitles: '//div[@class="ag-item"]//a',
+  inH1SelText: '//h1/span',
+  listResultsFromTitles: '//div[@class="ag-item"]/a',
   pageNext: '//div[@id="paging"]//li[@class="active"]',
   listResultsWithoutTitles: '//div[@class="details"]/a[@class="description"]',
   addToCartBtnList: '//input[@name="addToCartButton"]',
@@ -15,6 +15,8 @@ const sel = {
   itemInCart: '//div[@class="details"]/span/a',
   deleteSign: '//a[@class="deleteCartItemButton close"]',
   messageEmptyCard: '//p[@class="header-1"]',
+  pageNums: '//div[@id="paging"]//ul/li',
+  selNextPage: '//div[@id="paging"]//a[text()="',
 };
 
 const data = {
@@ -26,7 +28,8 @@ const data = {
   
 };
 
-let lastItem = null;
+let lastItem;
+let lastPageNum;
 
 describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   it('should open home page', () => {
@@ -44,17 +47,21 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   });
 
   it('should check a list of search results with titles', () => {
-    const listResults = $$(sel.listResultsFromTitles); 
-    expect(listResults.map(el => el.getAttribute('title')).every(el => el.includes('Table')));
+    const listResults = $$(sel.listResultsFromTitles).map(el => el.getAttribute('title')).every(el => el.includes('Table'));
+    expect(listResults).true;
+    const pageNumList = $$(sel.pageNums).map(el => +el.getText()).filter(el => !Number.isNaN(el));
+    lastPageNum = Math.max(...pageNumList);
   });
 
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= lastPageNum; i++) {
+    console.log(i, lastPageNum, '00000000000');
     it(`should get to the next page num ${i}`, () => {
       if(i > 1){
-        const selNextPage = $(`//div[@id="paging"]//a[text()="${i}"]`);
-        selNextPage.click();
-        $(sel.pageNext).waitForDisplayed();
-        expect($(sel.pageNext).getText()).eq(`${i}`);
+        let nextPage = sel.selNextPage + `${i}` + '"]';
+        console.log(nextPage, '---------------');
+        $(nextPage).click();
+        $(nextPage).waitForDisplayed();
+        expect($(nextPage).getText()).eq(`${i}`);
       }
     });
 
@@ -64,47 +71,47 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
       expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
     });
   }
-
-  it('should get last item with `table` from search results list and click `Add To Cart` button', () => {
-    const btnList = $$(sel.addToCartBtnList);
-    const addToCartBtnLast = btnList[btnList.length - 1];
-    addToCartBtnLast.click();
-  });
-
-  //if (modalWindow) {
-  it('should check equality of modal window title', () => {
-    $(sel.modalWindow).isDisplayed();
-    // const h3Title = $('//h3[@id="myModalLabel"]').getText();
-    // expect(lastItem).includes(h3Title);
-  });
-
-  it('should fill all options for the item in modal window', () => {
-    $(sel.addToCartButtonModal).click();
-  });
-  //  }
-
-  it('should check that the pop-up message appears', () => {
-    $(sel.message).isDisplayed();
-    //const closeBtn = $('//div[@class="notification-center"]/button[@class="close"]');
-    $(sel.cartBtn).waitForDisplayed();
-    // const viewCartBtn = $('//div[@id="notification12010707"]/div/a[text()="View Cart"]');
-    // viewCartBtn.click();
-    // expect($('//h1').getText()).eq('Cart');
-  });
-
-  it('should redirect user to Cart Page', () => {
-    $(sel.cartBtn).click();
-    expect($('//h1').getText()).eq('Cart');
-  });
-
-  it('should check that the item is in the cart', () => {
-    const itemInCartTitle = $(sel.itemInCart).getAttribute('title');
-    expect(itemInCartTitle).eq(lastItem);
-  });
-
-  it('should check delete item from the cart', () => {
-    $(sel.deleteSign).click();
-    $(sel.messageEmptyCard).waitForDisplayed();
-    expect($(sel.messageEmptyCard).getText()).eq('Your cart is empty.');
-  });
+  //
+  // it('should get last item with `table` from search results list and click `Add To Cart` button', () => {
+  //   const btnList = $$(sel.addToCartBtnList);
+  //   const addToCartBtnLast = btnList[btnList.length - 1];
+  //   addToCartBtnLast.click();
+  // });
+  //
+  // //if (modalWindow) {
+  // it('should check equality of modal window title', () => {
+  //   $(sel.modalWindow).isDisplayed();
+  //   // const h3Title = $('//h3[@id="myModalLabel"]').getText();
+  //   // expect(lastItem).includes(h3Title);
+  // });
+  //
+  // it('should fill all options for the item in modal window', () => {
+  //   $(sel.addToCartButtonModal).click();
+  // });
+  // //  }
+  //
+  // it('should check that the pop-up message appears', () => {
+  //   $(sel.message).isDisplayed();
+  //   //const closeBtn = $('//div[@class="notification-center"]/button[@class="close"]');
+  //   $(sel.cartBtn).waitForDisplayed();
+  //   // const viewCartBtn = $('//div[@id="notification12010707"]/div/a[text()="View Cart"]');
+  //   // viewCartBtn.click();
+  //   // expect($('//h1').getText()).eq('Cart');
+  // });
+  //
+  // it('should redirect user to Cart Page', () => {
+  //   $(sel.cartBtn).click();
+  //   expect($('//h1').getText()).eq('Cart');
+  // });
+  //
+  // it('should check that the item is in the cart', () => {
+  //   const itemInCartTitle = $(sel.itemInCart).getAttribute('title');
+  //   expect(itemInCartTitle).eq(lastItem);
+  // });
+  //
+  // it('should check delete item from the cart', () => {
+  //   $(sel.deleteSign).click();
+  //   $(sel.messageEmptyCard).waitForDisplayed();
+  //   expect($(sel.messageEmptyCard).getText()).eq('Your cart is empty.');
+  // });
 });
