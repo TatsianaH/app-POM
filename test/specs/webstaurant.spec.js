@@ -25,11 +25,11 @@ const data = {
   searchValue: 'stainless work table',
   searchPageUrl: 'https://www.webstaurantstore.com/search/stainless-work-table.html',
   textInH1: 'Stainless Work Table',
+  lastPageNum: null,
   
 };
 
 let lastItem;
-let lastPageNum;
 
 describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   it('should open home page', () => {
@@ -49,28 +49,38 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   it('should check a list of search results with titles', () => {
     const listResults = $$(sel.listResultsFromTitles).map(el => el.getAttribute('title')).every(el => el.includes('Table'));
     expect(listResults).true;
-    const pageNumList = $$(sel.pageNums).map(el => +el.getText()).filter(el => !Number.isNaN(el));
-    lastPageNum = Math.max(...pageNumList);
   });
 
-  for (let i = 1; i <= lastPageNum; i++) {
-    console.log(i, lastPageNum, '00000000000');
-    it(`should get to the next page num ${i}`, () => {
+  it('should get the last page number', () => {
+    const pageNumList = $$(sel.pageNums).map(el => +el.getText()).filter(el => !Number.isNaN(el));
+    data.lastPageNum = Math.max(...pageNumList);
+    console.log(data.lastPageNum, '========');
+    expect(data.lastPageNum).to.be.a('number');
+  });
+  
+  
+  it('should get to the next page and check all description for searching item', () => {
+    for (let i = 1; i <= data.lastPageNum; i++) {
       if(i > 1){
-        let nextPage = sel.selNextPage + `${i}` + '"]';
-        console.log(nextPage, '---------------');
-        $(nextPage).click();
-        $(nextPage).waitForDisplayed();
-        expect($(nextPage).getText()).eq(`${i}`);
+        const selNextPage = $(`//div[@id="paging"]//a[text()="${i}"]`);
+        selNextPage.click();
+        $(sel.pageNext).waitForDisplayed();
       }
-    });
+      expect($(sel.pageNext).getText()).eq(`${i}`);
 
-    it('should check a list of search results without titles', () => {
       const listResults = $$(sel.listResultsWithoutTitles);
-      lastItem = listResults[listResults.length - 1].getText();
+      console.log(listResults.length, '==================');
       expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
-    });
-  }
+    }
+  });
+
+  //add different selector to get #number
+  it('should get last item on the last page', () => {
+    const listResults = $$(sel.listResultsWithoutTitles);
+    lastItem = listResults[listResults.length - 1].getText();
+    expect(lastItem).to.be.a('string');
+  });
+
   //
   // it('should get last item with `table` from search results list and click `Add To Cart` button', () => {
   //   const btnList = $$(sel.addToCartBtnList);
