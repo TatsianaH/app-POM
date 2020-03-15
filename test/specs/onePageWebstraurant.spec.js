@@ -12,7 +12,7 @@ const sel = {
   modalWindow: '//div[@id="ag-sub-grid"]',
   addToCartButtonModal: '//div[@id="ag-sub-grid"]//button[@name="addToCartButton"]',
   message: '//div[@id[contains(text(), "notification")]]',
-  cartBtn: '//span[@class="menu-btn-text"][contains(text(),"Cart")]',
+  cartBtn: '//a[@href="/viewcart.cfm"]',
   itemInCartCode: '//p[contains(@class,"itemNumber")]',
   deleteSign: '//a[@class="deleteCartItemButton close"]',
   messageEmptyCard: '//p[@class="header-1"]',
@@ -44,17 +44,17 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     expect(title).eq(data.homePageTitle);
   });
 
-  it('should insert value in search field', () => {
+  it('should insert value in search field and check that it is correct', () => {
     $(sel.inputSearch).setValue(data.searchValue);
     browser.waitUntil(() => {
       const textFromSearchInput = $(sel.inputSearchFilled).getText();
-      console.log(textFromSearchInput, '1111111111111');
+      console.log(textFromSearchInput, 'TEXTTEXTTEXT----------------------');
       return textFromSearchInput === data.searchValue;
     }, 2000, 'WRONG SEARCH TEXT');
 
   });
 
-  it('should redirect user to 1st page with results', () => {
+  it('should redirect user to the 1st page with results', () => {
     $(sel.btnSearch).click();
     const text = $(sel.inH1SelText).getText();
     expect(browser.getUrl()).eq(data.searchPageUrl);
@@ -68,103 +68,56 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
 
   it('should check all search results on the 1st page without titles', () => {
     const listResults = $$(sel.listResultsWithoutTitles);
+    console.log(listResults.length, 'LENGTH!!!!!!');
     expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
   });
 
-  it('should get the last page number', () => {
-    const pageNumList = $$(sel.pageNums).map(el => +el.getText()).filter(el => !Number.isNaN(el));
-    data.lastPageNum = Math.max(...pageNumList);
-    console.log(data.lastPageNum, '000000000000');
-    expect(data.lastPageNum).to.be.a('number');
-  });
-  
-  it('should get to the next page and check all description for searching item', () => {
-    for (let i = 2; i <= data.lastPageNum; i++) {
-      const selNextPage = `//div[@id="paging"]//a[text()="${i}"]`;
-      $(selNextPage).click();
-      browser.waitUntil(
-        () => {
-          const activePageNum = $(sel.pageNext).getText();
-          console.log(activePageNum, '==============');
-          return +activePageNum === i;
-        },
-        2000,
-        'WRONG Page',
-      );
-
-      const listResults = $$(sel.listResultsWithoutTitles);
-      console.log(listResults.length, '+++++++++++++++');
-      expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
-    }
-  });
-
-  //add different selector to get #number
+  // different selector to get #number
   it('should get last item on the last page', () => {
-    if(browser.getUrl() === 'https://www.webstaurantstore.com/search/stainless-work-table.html?page=9'){
-      const listCodeResults = $$(sel.listCodeResults);
-      lastItem = listCodeResults[listCodeResults.length - 1].getValue();
-      data.lastItemLength = lastItem.length;
-      //data.lastPageUrl = browser.getUrl();
-      expect(lastItem).to.be.a('string');
-    }
+    const listCodeResults = $$(sel.listCodeResults);
+    lastItem = listCodeResults[listCodeResults.length - 1].getValue();
+    data.lastItemLength = lastItem.length;
+    console.log(lastItem, listCodeResults.length, 'LENGTH');
+    expect(lastItem).to.be.a('string');
   });
 
   it('should get last item with `table` from search results list and click its `Add To Cart` button', () => {
     const btnList = $$(sel.addToCartBtnList);
     sel.addToCartBtnLast = btnList[btnList.length - 1];
+    console.log(btnList.length, 'BTN LENGTH=======');
     sel.addToCartBtnLast.click();
+    browser.pause(2000);
   });
 
-  it('should check equality of modal window title', () => {
+  it('should check equality of modal window title if it appears', () => {
     if ($(sel.modalWindow).isDisplayed()) {
-      //$(sel.modalWindow).isDisplayed();
       const h3Title = $('//h3[@id="myModalLabel"]').getText();
+      console.log(h3Title, '========');
       $(sel.addToCartButtonModal).click();
-      console.log(lastItem, h3Title.slice(-data.lastItemLength), '========');
       expect(lastItem).eq(h3Title.slice(-data.lastItemLength));
     }
   });
 
-  // it('should go to notification message', async () => {
-  //   // const iframe = '//iframe';
-  //   // //const frame = await browser.$(iframe);
-  //   // await browser.switchToFrame($(iframe));
-  //   //$(sel.message).isDisplayed();
-  //   expect($('//p[@class="header-4"]').getText()).includes('1');
-  // });
-
-  it('should check that the pop-up message appears', () => {
-    //$(sel.message).waitForDisplayed();
-    const closeBtn = '//div[@id[contains(text(), "notification")]]/button[@class="close"]';
-    $(closeBtn).click();
-    // const viewCartBtn = $('//div[@id="notification12010707"]/div/a[text()="View Cart"]');
-    // viewCartBtn.click();
-    // expect($('//h1').getText()).eq('Cart');
-  });
-
-  // it('should go to the last page', async () => {
-  //   await browser.switchToFrame(null);
-  //   expect($('/p[@class="header-4"]').getText()).includes('1');
-  // });
+  // don't check and interact with notification message
 
   it('should redirect user to Cart Page', () => {
     browser.waitUntil(
       () => {
-        return $(sel.cartBtn).isDisplayed();
+        return  $(sel.cartBtn).isClickable();
       },
       2000,
-      'CARD BTN IS NOT DISPLAYED',
+      'CARD BTN IS NOT CLICKABLE',
     );
     $(sel.cartBtn).click();
     expect($('//h1').getText()).eq('Cart');
   });
 
-  it('should check that the item is in the cart', () => {
+  it('should check that the last item is in the cart', () => {
     const itemInCartProductCode = $(sel.itemInCartCode).getText();
     expect(itemInCartProductCode).includes(lastItem);
   });
 
-  it('should check delete item from the cart', () => {
+  it('should delete the item from the cart', () => {
     $(sel.deleteSign).click();
     $(sel.messageEmptyCard).waitForDisplayed();
     expect($(sel.messageEmptyCard).getText()).eq('Your cart is empty.');
