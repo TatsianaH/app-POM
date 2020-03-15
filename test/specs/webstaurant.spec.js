@@ -21,7 +21,7 @@ const sel = {
   listCodeResults: '//div[@class="details"]/p/input',
   addToCartBtnLast: null,
   activePage: '//li[@class="active"]/span',
-  //modalWindowShowed: '//div[@aria-hidden="false"]',
+  h3Title: '//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]',
 };
 
 const data = {
@@ -37,18 +37,18 @@ const data = {
 
 let lastItem;
 
-describe('WebstrauntStore_FIND_LAST_ITEM', () => {
+describe('WebstaurantStore_FIND_LAST_ITEM_ON_THE_LAST_PAGE', () => {
   it('should open home page', () => {
     browser.url(data.homePageUrl);
     const title = browser.getTitle();
     expect(title).eq(data.homePageTitle);
   });
 
-  it('should insert value in search field and check that it is correct', () => {
+  it('should insert value in search field and check it is correct', () => {
     $(sel.inputSearch).setValue(data.searchValue);
     browser.waitUntil(() => {
       const textFromSearchInput = $(sel.inputSearchFilled).getText();
-      console.log(textFromSearchInput, 'TEXTTEXTTEXT----------------------');
+      //console.log(textFromSearchInput, 'TEXTTEXTTEXT----------------------');
       return textFromSearchInput === data.searchValue;
     }, 2000, 'WRONG SEARCH TEXT');
 
@@ -66,39 +66,33 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     expect(listResults).true;
   });
 
-  it('should check all search results on the 1st page without titles', () => {
-    const listResults = $$(sel.listResultsWithoutTitles);
-    expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
-  });
-
   it('should get the last page number', () => {
     const pageNumList = $$(sel.pageNums).map(el => +el.getText()).filter(el => !Number.isNaN(el));
     data.lastPageNum = Math.max(...pageNumList);
-    console.log(data.lastPageNum, '000000000000');
     expect(data.lastPageNum).to.be.a('number');
   });
   
   it('should get to the next page and check all description for searching item', () => {
-    for (let i = 2; i <= data.lastPageNum; i++) {
-      const selNextPage = `//div[@id="paging"]//a[text()="${i}"]`;
-      $(selNextPage).click();
+    for (let i = 1; i <= data.lastPageNum; i++) {
+      if(i > 1) {
+        const selNextPage = `//div[@id="paging"]//a[text()="${i}"]`;
+        $(selNextPage).click();
+      }
       browser.waitUntil(
         () => {
           const activePageNum = $(sel.pageNext).getText();
-          console.log(activePageNum, '==============');
           return +activePageNum === i;
         },
         2000,
         'WRONG Page',
       );
-
+      
       const listResults = $$(sel.listResultsWithoutTitles);
-      console.log(listResults.length, '+++++++++++++++');
       expect(listResults.map(el => el.getText()).every(el => el.includes('Table')));
     }
   });
 
-  //add different selector to get #number
+  //add different selector to get #number of the item
   it('should get last item on the last page', () => {
     if(browser.getUrl() === 'https://www.webstaurantstore.com/search/stainless-work-table.html?page=9'){
       const listCodeResults = $$(sel.listCodeResults);
@@ -108,34 +102,23 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     }
   });
 
+  //get list of 'AddToCart' buttons on the last page
   it('should get last item with `table` from search results list and click its `Add To Cart` button', () => {
     const btnList = $$(sel.addToCartBtnList);
     sel.addToCartBtnLast = btnList[btnList.length - 1];
     sel.addToCartBtnLast.click();
   });
 
+  //equality of #number of the item
   it('should check equality of modal window title', () => {
     if ($(sel.addToCartButtonModal)) {
-      const h3Title = $('//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]').getText();
+      const textInModalWindowTitle = $(sel.h3Title).getText();
       $(sel.addToCartButtonModal).click();
-      console.log(lastItem, h3Title.slice(-data.lastItemLength), '========');
-      expect(lastItem).eq(h3Title.slice(-data.lastItemLength));
+      expect(lastItem).eq(textInModalWindowTitle.slice(-data.lastItemLength));
     }
   });
 
-  // it('should go to notification message', async () => {
-  //   // const iframe = '//iframe';
-  //   // //const frame = await browser.$(iframe);
-  //   // await browser.switchToFrame($(iframe));
-  //   //$(sel.message).isDisplayed();
-  //   expect($('//p[@class="header-4"]').getText()).includes('1');
-  // });
-  //
-  // it('should check that the pop-up message appears', () => {
-  //   //$(sel.message).waitForDisplayed();
-  //   const closeBtn = '//div[@id[contains(text(), "notification")]]/button[@class="close"]';
-  //   $(closeBtn).click();
-  // });
+  // counldn't catch notification message and interact with it
 
   it('should redirect user to Cart Page', () => {
     browser.waitUntil(
@@ -149,6 +132,7 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     expect($('//h1').getText()).eq('Cart');
   });
 
+  //equality according to #number of the item
   it('should check that the item is in the cart', () => {
     const itemInCartProductCode = $(sel.itemInCartCode).getText();
     expect(itemInCartProductCode).includes(lastItem);

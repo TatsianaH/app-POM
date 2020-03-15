@@ -9,8 +9,8 @@ const sel = {
   pageNext: '//div[@id="paging"]//li[@class="active"]/span',
   listResultsWithoutTitles: '//div[@class="details"]/a[@class="description"]',
   addToCartBtnList: '//input[@name="addToCartButton"]',
-  modalWindow: '//div[@id="ag-sub-grid"]',
-  addToCartButtonModal: '//div[@id="ag-sub-grid"]//button[@name="addToCartButton"]',
+  modalWindow: '//div[@class="modal-scrollable"]/div[@id="ag-sub-grid"]',
+  addToCartButtonModal: '//div[@class="modal-scrollable"]//button[@name="addToCartButton"]',
   message: '//div[@id[contains(text(), "notification")]]',
   cartBtn: '//a[@href="/viewcart.cfm"]',
   itemInCartCode: '//p[contains(@class,"itemNumber")]',
@@ -21,7 +21,6 @@ const sel = {
   listCodeResults: '//div[@class="details"]/p/input',
   addToCartBtnLast: null,
   activePage: '//li[@class="active"]/span',
-  //modalWindowShowed: '//div[@aria-hidden="false"]',
 };
 
 const data = {
@@ -37,14 +36,14 @@ const data = {
 
 let lastItem;
 
-describe('WebstrauntStore_FIND_LAST_ITEM', () => {
+describe('WebstrauntStore_FIND_LAST_ITEM_ON_THE_FIRST_PAGE', () => {
   it('should open home page', () => {
     browser.url(data.homePageUrl);
     const title = browser.getTitle();
     expect(title).eq(data.homePageTitle);
   });
 
-  it('should insert value in search field and check that it is correct', () => {
+  it('should insert value in search field and check it is correct', () => {
     $(sel.inputSearch).setValue(data.searchValue);
     browser.waitUntil(() => {
       const textFromSearchInput = $(sel.inputSearchFilled).getText();
@@ -89,10 +88,10 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     browser.pause(2000);
   });
 
-  it('should check equality of modal window title if it appears', () => {
-    if ($(sel.modalWindow).isDisplayed()) {
-      const h3Title = $('//h3[@id="myModalLabel"]').getText();
-      console.log(h3Title, '========');
+  //equality of #number of the item
+  it('should check equality of modal window title', () => {
+    if ($(sel.addToCartButtonModal)) {
+      const h3Title = $('//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]').getText();
       $(sel.addToCartButtonModal).click();
       expect(lastItem).eq(h3Title.slice(-data.lastItemLength));
     }
