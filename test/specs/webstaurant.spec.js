@@ -9,10 +9,10 @@ const sel = {
   pageNext: '//div[@id="paging"]//li[@class="active"]/span',
   listResultsWithoutTitles: '//div[@class="details"]/a[@class="description"]',
   addToCartBtnList: '//input[@name="addToCartButton"]',
-  modalWindow: '//div[@id="ag-sub-grid"]',
-  addToCartButtonModal: '//div[@id="ag-sub-grid"]//button[@name="addToCartButton"]',
+  modalWindow: '//div[@class="modal-scrollable"]/div[@id="ag-sub-grid"]',
+  addToCartButtonModal: '//div[@class="modal-scrollable"]//button[@name="addToCartButton"]',
   message: '//div[@id[contains(text(), "notification")]]',
-  cartBtn: '//span[@class="menu-btn-text"][contains(text(),"Cart")]',
+  cartBtn: '//a[@href="/viewcart.cfm"]',
   itemInCartCode: '//p[contains(@class,"itemNumber")]',
   deleteSign: '//a[@class="deleteCartItemButton close"]',
   messageEmptyCard: '//p[@class="header-1"]',
@@ -44,17 +44,17 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
     expect(title).eq(data.homePageTitle);
   });
 
-  it('should insert value in search field', () => {
+  it('should insert value in search field and check that it is correct', () => {
     $(sel.inputSearch).setValue(data.searchValue);
     browser.waitUntil(() => {
       const textFromSearchInput = $(sel.inputSearchFilled).getText();
-      console.log(textFromSearchInput, '1111111111111');
+      console.log(textFromSearchInput, 'TEXTTEXTTEXT----------------------');
       return textFromSearchInput === data.searchValue;
     }, 2000, 'WRONG SEARCH TEXT');
 
   });
 
-  it('should redirect user to 1st page with results', () => {
+  it('should redirect user to the 1st page with results', () => {
     $(sel.btnSearch).click();
     const text = $(sel.inH1SelText).getText();
     expect(browser.getUrl()).eq(data.searchPageUrl);
@@ -104,7 +104,6 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
       const listCodeResults = $$(sel.listCodeResults);
       lastItem = listCodeResults[listCodeResults.length - 1].getValue();
       data.lastItemLength = lastItem.length;
-      //data.lastPageUrl = browser.getUrl();
       expect(lastItem).to.be.a('string');
     }
   });
@@ -116,9 +115,8 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   });
 
   it('should check equality of modal window title', () => {
-    if ($(sel.modalWindow).isDisplayed()) {
-      //$(sel.modalWindow).isDisplayed();
-      const h3Title = $('//h3[@id="myModalLabel"]').getText();
+    if ($(sel.addToCartButtonModal)) {
+      const h3Title = $('//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]').getText();
       $(sel.addToCartButtonModal).click();
       console.log(lastItem, h3Title.slice(-data.lastItemLength), '========');
       expect(lastItem).eq(h3Title.slice(-data.lastItemLength));
@@ -132,28 +130,20 @@ describe('WebstrauntStore_FIND_LAST_ITEM', () => {
   //   //$(sel.message).isDisplayed();
   //   expect($('//p[@class="header-4"]').getText()).includes('1');
   // });
-
-  it('should check that the pop-up message appears', () => {
-    //$(sel.message).waitForDisplayed();
-    const closeBtn = '//div[@id[contains(text(), "notification")]]/button[@class="close"]';
-    $(closeBtn).click();
-    // const viewCartBtn = $('//div[@id="notification12010707"]/div/a[text()="View Cart"]');
-    // viewCartBtn.click();
-    // expect($('//h1').getText()).eq('Cart');
-  });
-
-  // it('should go to the last page', async () => {
-  //   await browser.switchToFrame(null);
-  //   expect($('/p[@class="header-4"]').getText()).includes('1');
+  //
+  // it('should check that the pop-up message appears', () => {
+  //   //$(sel.message).waitForDisplayed();
+  //   const closeBtn = '//div[@id[contains(text(), "notification")]]/button[@class="close"]';
+  //   $(closeBtn).click();
   // });
 
   it('should redirect user to Cart Page', () => {
     browser.waitUntil(
       () => {
-        return $(sel.cartBtn).isDisplayed();
+        return  $(sel.cartBtn).isClickable();
       },
       2000,
-      'CARD BTN IS NOT DISPLAYED',
+      'CARD BTN IS NOT CLICKABLE',
     );
     $(sel.cartBtn).click();
     expect($('//h1').getText()).eq('Cart');
