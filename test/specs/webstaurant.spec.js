@@ -48,7 +48,6 @@ describe('WebstaurantStore_FIND_LAST_ITEM_ON_THE_LAST_PAGE', () => {
     $(sel.inputSearch).setValue(data.searchValue);
     browser.waitUntil(() => {
       const textFromSearchInput = $(sel.inputSearchFilled).getText();
-      //console.log(textFromSearchInput, 'TEXTTEXTTEXT----------------------');
       return textFromSearchInput === data.searchValue;
     }, 2000, 'WRONG SEARCH TEXT');
 
@@ -72,7 +71,7 @@ describe('WebstaurantStore_FIND_LAST_ITEM_ON_THE_LAST_PAGE', () => {
     expect(data.lastPageNum).to.be.a('number');
   });
   
-  it('should get to the next page and check all description for searching item', () => {
+  it('should get to the next page and check all description for searching item on all pages', () => {
     for (let i = 1; i <= data.lastPageNum; i++) {
       if(i > 1) {
         const selNextPage = `//div[@id="paging"]//a[text()="${i}"]`;
@@ -107,11 +106,12 @@ describe('WebstaurantStore_FIND_LAST_ITEM_ON_THE_LAST_PAGE', () => {
     const btnList = $$(sel.addToCartBtnList);
     sel.addToCartBtnLast = btnList[btnList.length - 1];
     sel.addToCartBtnLast.click();
+    browser.pause(500);
   });
 
   //equality of #number of the item
   it('should check equality of modal window title', () => {
-    if ($(sel.addToCartButtonModal)) {
+    if ($(sel.addToCartButtonModal).isExisting()) {
       const textInModalWindowTitle = $(sel.h3Title).getText();
       $(sel.addToCartButtonModal).click();
       expect(lastItem).eq(textInModalWindowTitle.slice(-data.lastItemLength));

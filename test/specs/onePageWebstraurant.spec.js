@@ -21,6 +21,7 @@ const sel = {
   listCodeResults: '//div[@class="details"]/p/input',
   addToCartBtnLast: null,
   activePage: '//li[@class="active"]/span',
+  h3Title: '//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]',
 };
 
 const data = {
@@ -89,13 +90,15 @@ describe('WebstrauntStore_FIND_LAST_ITEM_ON_THE_FIRST_PAGE', () => {
   });
 
   //equality of #number of the item
+
   it('should check equality of modal window title', () => {
-    if ($(sel.addToCartButtonModal)) {
-      const h3Title = $('//div[@class="modal-scrollable"]//h3[@id="myModalLabel"]').getText();
+    if ($(sel.addToCartButtonModal).isExisting()) {
+      const textInModalWindowTitle = $(sel.h3Title).getText();
       $(sel.addToCartButtonModal).click();
-      expect(lastItem).eq(h3Title.slice(-data.lastItemLength));
+      expect(lastItem).eq(textInModalWindowTitle.slice(-data.lastItemLength));
     }
   });
+
 
   // don't check and interact with notification message
 
