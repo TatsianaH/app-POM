@@ -9,7 +9,8 @@
     "report": "allure generate --clean && allure open",
     "clean": "rm -rf allure-results",
     "rest": "npm run clean && wdio wdio.conf.js --spec test/specs/webstaurant.spec.js --inspect",
-    "one": "npm run clean && wdio wdio.conf.js --spec test/specs/onePageWebstraurant.spec.js --inspect"
+    "one": "npm run clean && wdio wdio.conf.js --spec test/specs/onePageWebstraurant.spec.js --inspect",
+    "asana": "npm run clean && wdio wdio.conf.js --spec test/specs/asana.spec.js --inspect"
   },
   "author": "Tatsiana Hantsevich",
   "license": "ISC",
