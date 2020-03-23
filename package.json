@@ -19,9 +19,11 @@
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "@babel/register": "^7.8.3",
+    "@sentry/node": "^5.14.2",
     "@wdio/cli": "^5.18.7",
+    "axios": "^0.19.2",
     "chai": "^4.2.0",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.1",
     "webdriverio": "^5.18.7"
   },
   "devDependencies": {
