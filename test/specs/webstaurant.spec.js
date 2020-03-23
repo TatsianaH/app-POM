@@ -129,7 +129,7 @@ describe('WebstaurantStore_FIND_LAST_ITEM_ON_THE_LAST_PAGE', () => {
       'CARD BTN IS NOT CLICKABLE',
     );
     $(sel.cartBtn).click();
-    expect($('//h1').getText()).eq('Cart');
+    expect($('//header').getText()).eq('Cart');
   });
 
   //equality according to #number of the item

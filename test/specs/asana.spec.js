@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import axios  from 'axios';
 
 const sel = {
-  h1: '//h1',
+  header: '//h1[@class="heading -h3"]',
   mainMenu: '//ul[@role="group"]',
   menuItem: '//ul[@role="group"]/li',
   whyAsanaDropDownMenu: '//div[@id="navigation__dropdown-why-asana"]',
@@ -13,7 +13,7 @@ const sel = {
 
 
 const data = {
-  h1Text: 'Keep your team organized and connected',
+  headerText: 'Keep your team organized and connected',
   url: 'https://asana.com/',
 
 };
@@ -23,7 +23,7 @@ let mainMenuItem = null;
 describe('Asana website', () => {
   it('should go to the main page', () => {
     browser.url(data.url);
-    expect($(sel.h1).getText()).eq(data.h1Text);
+    expect($(sel.header).getText()).eq(data.headerText);
   });
 
   it('should check main menu presents on the page', () => {
