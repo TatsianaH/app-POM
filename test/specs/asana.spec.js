@@ -7,10 +7,11 @@ const sel = {
   menuItem: '//ul[@role="group"]/li',
   whyAsanaDropDownMenu: '//button[@id="navigation__dropdown-toggle-why-asana"]',
   solutionsDropDownMenu: '//button[@id="navigation__dropdown-toggle-solutions"]',
-  resourcesDropDownMenu:'',
+  resourcesDropDownMenu:'//button[@id="navigation__dropdown-toggle-resources"]',
   pricing: '',
   whyAsanaAllUrls: '//div[@id="navigation__dropdown-why-asana"]//a',
   arrSolutionsLinks: '//div[@id="navigation__dropdown-solutions"]//a',
+  resourcesLinks: '//div[@id="navigation__dropdown-resources"]//a'
 };
 
 const data = {
@@ -20,13 +21,14 @@ const data = {
 };
 
 const urls = {
-  asanaOverview: 'https://asana.com/product',
+  pricingUrl: 'https://asana.com/pricing',
 
 };
 
 let mainMenuItem = null;
 let arrWhyAsanaLinks = null;
 let arrSolutionsLinks = null;
+let arrResourcesLinks = null;
 
 describe('Asana website', () => {
   it('should go to the main page', () => {
@@ -49,7 +51,7 @@ describe('Asana website', () => {
     }
   });
 
-  it('should check `why Asana?` is clickable', () => {
+  it('should check `why Asana?` dropDownMenu is displayed after click on it', () => {
     mainMenuItem[0].click();
     expect($(sel.whyAsanaDropDownMenu).isDisplayed());
   });
@@ -60,38 +62,44 @@ describe('Asana website', () => {
     expect(arrWhyAsanaLinks.length).eq(13);
   });
 
-  it('should check all links in `Why Asana?` redirect to proper page', async () => {
+  it('should check all links in `Why Asana?` redirect to proper pages', async () => {
     const actual = await checkUrl(...arrWhyAsanaLinks);
     expect(actual).eq(200);
   });
 
-  it('should click `Solutions` button', () => {
+  it('should check `Solutions`dropDownMenu is displayed after click on it', () => {
     mainMenuItem[1].click();
     expect($(sel.solutionsDropDownMenu).isDisplayed());
   });
 
-  it('should check all links in `Solutions` are redirect to proper page',  () => {
+  it('should get all links from `Solutions` dropDownMenu',  () => {
     arrSolutionsLinks = $$(sel.arrSolutionsLinks).map(el => el.getAttribute('href'));
     expect(arrSolutionsLinks.length).eq(18);
   });
 
-  it('should check all links in `Why Asana?` redirect to proper page', async () => {
+  it('should check all links in `Solutions` are redirect to proper pages', async () => {
     const actual = await checkUrl(...arrSolutionsLinks);
     expect(actual).eq(200);
   });
 
-  // it('should click `Solutions` button', () => {
-  //   mainMenuItem[2].click();
-  //   expect($(sel.solutionsDropDownMenu).isDisplayed());
-  // });
-  //
-  // it('should check all links in `Solutions` are redirect to proper page',  () => {
-  //   arrSolutionsLinks = $$(sel.arrSolutionsLinks).map(el => el.getAttribute('href'));
-  //   expect(arrSolutionsLinks.length).eq(18);
-  // });
-  //
-  // it('should check all links in `Why Asana?` redirect to proper page', async () => {
-  //   const actual = await checkUrl(...arrSolutionsLinks);
-  //   expect(actual).eq(200);
-  // });
+  it('should check `Resources` dropDownMenu is displayed after click on it', () => {
+    mainMenuItem[2].click();
+    expect($(sel.resourcesDropDownMenu).isDisplayed());
+  });
+
+  it('should get all links from `Recources` dropDownMenu',  () => {
+    arrResourcesLinks = $$(sel.resourcesLinks).map(el => el.getAttribute('href'));
+    expect(arrResourcesLinks.length).eq(11);
+  });
+
+  it('should check all links in `Resources` are redirect to proper page', async () => {
+    const actual = await checkUrl(...arrResourcesLinks);
+    expect(actual).eq(200);
+  });
+
+  it('should check the `Pricing` in the main menu redirects to proper page', async () => {
+    mainMenuItem[3].click();
+    const actual = await checkUrl(urls.pricingUrl);
+    expect(actual).eq(200);
+  });
 });
