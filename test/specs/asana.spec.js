@@ -11,7 +11,14 @@ const sel = {
   pricing: '',
   whyAsanaAllUrls: '//div[@id="navigation__dropdown-why-asana"]//a',
   arrSolutionsLinks: '//div[@id="navigation__dropdown-solutions"]//a',
-  resourcesLinks: '//div[@id="navigation__dropdown-resources"]//a'
+  resourcesLinks: '//div[@id="navigation__dropdown-resources"]//a',
+  logo: '//a[contains(@class,"siteHeader__logo")]',
+  contactSalesLink: '//a[contains(@class, "contact-sales")]',
+  logInLink: '//a/span[text()="Log In"]',
+  logInModalWindow: '//div[@id="login"]',
+  tryForFreeBtnSideMenu: '//div[contains(@class, "siteHeader-buttons")]/a[text()="Try for free"]',
+  tryForFreeBtnContainer: '//div[@class="container"]//a[@title="Try for free"][1]',
+  tryForFreeBtnBottom: '//div[@class="textStack"]//a[@title="Try for free"][1]',
 };
 
 const data = {
@@ -22,7 +29,10 @@ const data = {
 
 const urls = {
   pricingUrl: 'https://asana.com/pricing',
-
+  asanaLogo: 'https://asana.com/?noredirect',
+  contactSalesUrl: 'https://asana.com/sales',
+  logInUrl: 'https://asana.com/?noredirect#login',
+  freeAccountCreate: 'https://asana.com/create-account',
 };
 
 let mainMenuItem = null;
@@ -31,6 +41,10 @@ let arrSolutionsLinks = null;
 let arrResourcesLinks = null;
 
 describe('Asana website', () => {
+  before('should maximize window', () => {
+    browser.setWindowSize(1400, 800);
+  });
+
   it('should go to the main page', () => {
     browser.url(data.url);
     expect($(sel.header).getText()).to.be.oneOf(data.headerText);
@@ -101,5 +115,87 @@ describe('Asana website', () => {
     mainMenuItem[3].click();
     const actual = await checkUrl(urls.pricingUrl);
     expect(actual).eq(200);
+  });
+
+  it('should redirect to home page', () => {
+    browser.pause(300);
+    $(sel.logo).click();
+    expect(browser.getUrl()).eq(urls.asanaLogo);
+  });
+
+  it('should check the `asana` logo redirects to home page', async () => {
+    const actual = await checkUrl(urls.asanaLogo);
+    expect(actual).eq(200);
+  });
+
+  it('should check that `Contact Sales` is clickable', () => {
+    expect($(sel.contactSalesLink).isClickable()).true;
+  });
+
+  it('should check the `Contact Sales` link redirects to proper page', async () => {
+    const actual = await checkUrl(urls.contactSalesUrl);
+    expect(actual).eq(200);
+  });
+
+  it('should redirect to home page', () => {
+    $(sel.logo).click();
+    expect(browser.getUrl()).eq(urls.asanaLogo);
+  });
+
+  // it('should redirect to home page', () => {
+  //   $(sel.logo).click();
+  //   expect(browser.getUrl()).eq(urls.asanaLogo);
+  // });
+
+  // it('should check that `Login` link redirects to `Login in Modal Window`', () => {
+  //   $(sel.logInLink).click();
+  //   expect($(sel.logInModalWindow).isDisplayed()).true;
+  // });
+
+  it('should check that `Try for free` button in the main menu is clickable', () => {
+    expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
+  });
+
+  it('should check the `Try for free` button in the main menu redirects to proper page', async () => {
+    //$(sel.tryForFreeBtnSideMenu).click();
+    const text = $(sel.tryForFreeBtnSideMenu).getAttribute('href')
+    console.log(text, '======');
+    const actual = await checkUrl(text);
+    expect(actual).eq(200);
+  });
+
+  it('should redirect to home page', () => {
+    $(sel.logo).click();
+    expect(browser.getUrl()).eq(urls.asanaLogo);
+  });
+
+  it('should check that `Try for free` button in the middle of the page is clickable', () => {
+    expect ($(sel.tryForFreeBtnContainer).isClickable()).true;
+  });
+
+  it('should check the `Try for free` button in the middle of the page redirects to proper page', async () => {
+    //$(sel.tryForFreeBtnContainer).click();
+    const actual = await checkUrl(urls.freeAccountCreate);
+    expect(actual).eq(200);
+  });
+
+  it('should redirect to home page', () => {
+    $(sel.logo).click();
+    expect(browser.getUrl()).eq(urls.asanaLogo);
+  });
+
+  it('should check that `Try for free` button in the bottom of the page is clickable', () => {
+    expect ($(sel.tryForFreeBtnBottom).isClickable()).true;
+  });
+
+  it('should check the `Try for free` button in the bottom of the page redirects to proper page', async () => {
+    //$(sel.tryForFreeBtnBottom).click();
+    const actual = await checkUrl(urls.tryForFreeBtnBottom);
+    expect(actual).eq(200);
+  });
+
+  it('should redirect to home page', () => {
+    $(sel.logo).click();
+    expect(browser.getUrl()).eq(urls.asanaLogo);
   });
 });
