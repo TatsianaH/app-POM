@@ -159,8 +159,8 @@ describe('Asana website', () => {
   it('should check the `Try for free` button in the main menu redirects to proper page', async () => {
     //$(sel.tryForFreeBtnSideMenu).click();
     const text = $(sel.tryForFreeBtnSideMenu).getAttribute('href')
-    console.log(text, '======');
-    const actual = await checkUrl(text);
+    console.log();
+    const actual = await checkUrl(urls.freeAccountCreate);
     expect(actual).eq(200);
   });
 
