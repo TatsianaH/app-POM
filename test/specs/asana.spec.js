@@ -19,6 +19,8 @@ const sel = {
   tryForFreeBtnSideMenu: '//div[contains(@class, "siteHeader-buttons")]/a[text()="Try for free"]',
   tryForFreeBtnContainer: '//div[@class="container"]//a[@title="Try for free"][1]',
   tryForFreeBtnBottom: '//div[@class="textStack"]//a[@title="Try for free"][1]',
+  contactSalesFrame: '//iframe[@id="71355782499168"]',
+  contactSalesHeader: '//h2[@id="header_1"]',
 };
 
 const data = {
@@ -88,7 +90,7 @@ describe('Asana website', () => {
 
   it('should get all links from `Solutions` dropDownMenu',  () => {
     arrSolutionsLinks = $$(sel.arrSolutionsLinks).map(el => el.getAttribute('href'));
-    expect(arrSolutionsLinks.length).eq(18);
+    expect(arrSolutionsLinks.length).eq(19);
   });
 
   it('should check all links in `Solutions` are redirect to proper pages', async () => {
@@ -137,10 +139,24 @@ describe('Asana website', () => {
     expect(actual).eq(200);
   });
 
-  it('should redirect to home page', () => {
-    $(sel.logo).click();
-    expect(browser.getUrl()).eq(urls.asanaLogo);
+  it('should click `Contact Sales`', () => {
+    $(sel.contactSalesLink).click();
+    
   });
+
+  it('should switch to iframe', () =>{
+    browser.switchToFrame($(sel.contactSalesFrame));
+    console.log($(sel.contactSalesHeader));
+    expect($(sel.contactSalesHeader).getText()).eq('Talk with our sales team');
+  });
+
+  it('should add value to all input fields', () => {
+    $('//input[@id="input_3"]').addValue('Tanya');
+  });
+  // it('should redirect to home page', () => {
+  //   $(sel.logo).click();
+  //   expect(browser.getUrl()).eq(urls.asanaLogo);
+  // });
 
   // it('should redirect to home page', () => {
   //   $(sel.logo).click();
@@ -152,50 +168,50 @@ describe('Asana website', () => {
   //   expect($(sel.logInModalWindow).isDisplayed()).true;
   // });
 
-  it('should check that `Try for free` button in the main menu is clickable', () => {
-    expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
-  });
-
-  it('should check the `Try for free` button in the main menu redirects to proper page', async () => {
-    //$(sel.tryForFreeBtnSideMenu).click();
-    const text = $(sel.tryForFreeBtnSideMenu).getAttribute('href')
-    console.log();
-    const actual = await checkUrl(urls.freeAccountCreate);
-    expect(actual).eq(200);
-  });
-
-  it('should redirect to home page', () => {
-    $(sel.logo).click();
-    expect(browser.getUrl()).eq(urls.asanaLogo);
-  });
-
-  it('should check that `Try for free` button in the middle of the page is clickable', () => {
-    expect ($(sel.tryForFreeBtnContainer).isClickable()).true;
-  });
-
-  it('should check the `Try for free` button in the middle of the page redirects to proper page', async () => {
-    //$(sel.tryForFreeBtnContainer).click();
-    const actual = await checkUrl(urls.freeAccountCreate);
-    expect(actual).eq(200);
-  });
-
-  it('should redirect to home page', () => {
-    $(sel.logo).click();
-    expect(browser.getUrl()).eq(urls.asanaLogo);
-  });
-
-  it('should check that `Try for free` button in the bottom of the page is clickable', () => {
-    expect ($(sel.tryForFreeBtnBottom).isClickable()).true;
-  });
-
-  it('should check the `Try for free` button in the bottom of the page redirects to proper page', async () => {
-    //$(sel.tryForFreeBtnBottom).click();
-    const actual = await checkUrl(urls.tryForFreeBtnBottom);
-    expect(actual).eq(200);
-  });
-
-  it('should redirect to home page', () => {
-    $(sel.logo).click();
-    expect(browser.getUrl()).eq(urls.asanaLogo);
-  });
+  // it('should check that `Try for free` button in the main menu is clickable', () => {
+  //   expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
+  // });
+  //
+  // it('should check the `Try for free` button in the main menu redirects to proper page', async () => {
+  //   //$(sel.tryForFreeBtnSideMenu).click();
+  //   const text = $(sel.tryForFreeBtnSideMenu).getAttribute('href')
+  //   console.log();
+  //   const actual = await checkUrl(urls.freeAccountCreate);
+  //   expect(actual).eq(200);
+  // });
+  //
+  // it('should redirect to home page', () => {
+  //   $(sel.logo).click();
+  //   expect(browser.getUrl()).eq(urls.asanaLogo);
+  // });
+  //
+  // it('should check that `Try for free` button in the middle of the page is clickable', () => {
+  //   expect ($(sel.tryForFreeBtnContainer).isClickable()).true;
+  // });
+  //
+  // it('should check the `Try for free` button in the middle of the page redirects to proper page', async () => {
+  //   //$(sel.tryForFreeBtnContainer).click();
+  //   const actual = await checkUrl(urls.freeAccountCreate);
+  //   expect(actual).eq(200);
+  // });
+  //
+  // it('should redirect to home page', () => {
+  //   $(sel.logo).click();
+  //   expect(browser.getUrl()).eq(urls.asanaLogo);
+  // });
+  //
+  // it('should check that `Try for free` button in the bottom of the page is clickable', () => {
+  //   expect ($(sel.tryForFreeBtnBottom).isClickable()).true;
+  // });
+  //
+  // it('should check the `Try for free` button in the bottom of the page redirects to proper page', async () => {
+  //   //$(sel.tryForFreeBtnBottom).click();
+  //   const actual = await checkUrl(urls.tryForFreeBtnBottom);
+  //   expect(actual).eq(200);
+  // });
+  //
+  // it('should redirect to home page', () => {
+  //   $(sel.logo).click();
+  //   expect(browser.getUrl()).eq(urls.asanaLogo);
+  // });
 });
