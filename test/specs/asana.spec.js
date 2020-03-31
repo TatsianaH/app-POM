@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import checkUrl from '../../getAction';
+import faker from 'faker';
 
 const sel = {
   header: '//h1',
@@ -21,12 +22,23 @@ const sel = {
   tryForFreeBtnBottom: '//div[@class="textStack"]//a[@title="Try for free"][1]',
   contactSalesFrame: '//iframe[@id="71355782499168"]',
   contactSalesHeader: '//h2[@id="header_1"]',
+  nameContactSalesInput: '//input[@id="input_3"]',
+  companyEmailContactSalesInput: '//input[@id="input_4"]',
+  phoneNumberContactSalesInput: '//input[@id="input_10"]',
+  companySizeSelectBox:'//select[@id="input_15"]',
+  evaluationSizeSelectBox: '//select[@id="input_16"]',
+  submitBtnContactSalesPage: '//button[@id="input_2"]',
 };
 
 const data = {
   headerText: ['Keep your team organized and connected', 'Make more time for the work that matters most'],
   url: 'https://asana.com',
-
+  discussText: faker.random.words(5),
+  contactSalesUrl: 'https://asana.com/sales',
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  phoneNumber: faker.phone.phoneNumber(),
+  email: faker.internet.email(),
 };
 
 const urls = {
@@ -150,9 +162,40 @@ describe('Asana website', () => {
     expect($(sel.contactSalesHeader).getText()).eq('Talk with our sales team');
   });
 
-  it('should add value to all input fields', () => {
-    $('//input[@id="input_3"]').addValue('Tanya');
+  it('should check that `Submit` button does not redirect to the another page', () => {
+  $(sel.submitBtnContactSalesPage).click();
+  expect(browser.getUrl()).eq(data.contactSalesUrl);
   });
+
+  it('should add value to `Name` field', () => {
+    $(sel.nameContactSalesInput).addValue(`${data.firstName} ${data.lastName}`);
+  });
+
+  it('should add value to `Company Email`field', () => {
+    $(sel.companyEmailContactSalesInput).addValue(data.email);
+  });
+
+  it('should add value to `Phone number`field', () => {
+    $(sel.phoneNumberContactSalesInput).addValue(`+${data.phoneNumber}`);
+  });
+
+  it('should select `Company Size`', () => {
+    $(sel.companySizeSelectBox).selectByIndex(2);
+  });
+
+  it('should select `Evaluation Size`', () => {
+    $(sel.evaluationSizeSelectBox).selectByIndex(2);
+  });
+
+  it('should add value to `discuss`field', () => {
+    $(sel.companyEmailContactSalesInput).addValue(data.discussText);
+  });
+
+  it('should check that `Submit` button is clickable', () => {
+    expect($(sel.submitBtnContactSalesPage).isClickable());
+  });
+
+
   // it('should redirect to home page', () => {
   //   $(sel.logo).click();
   //   expect(browser.getUrl()).eq(urls.asanaLogo);
