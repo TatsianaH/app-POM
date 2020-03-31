@@ -28,6 +28,10 @@ const sel = {
     companySizeSelectBox:'//select[@id="input_15"]',
     evaluationSizeSelectBox: '//select[@id="input_16"]',
     submitBtnContactSalesPage: '//button[@id="input_2"]',
+    useGoogleAccBtn: '//button[@title="useGoogleAccBtn"]',
+    emailLogInModalWindow: '//input[@id="login-form-modal-login"]',
+    passwordLogInModalWindow: '//input[@id="login-password-modal-login"]',
+    logInBtnModalWindow: '//input[@id="login-submit-modal-login"]',
 };
 
 const data = {
@@ -196,20 +200,25 @@ describe('Asana website', () => {
     });
 
 
-    // it('should redirect to home page', () => {
-    //   $(sel.logo).click();
-    //   expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
+    it('should redirect to home page', () => {
+      $(sel.logo).click();
+      expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
 
     // it('should redirect to home page', () => {
     //   $(sel.logo).click();
     //   expect(browser.getUrl()).eq(urls.asanaLogo);
     // });
 
-    // it('should check that `Login` link redirects to `Login in Modal Window`', () => {
-    //   $(sel.logInLink).click();
-    //   expect($(sel.logInModalWindow).isDisplayed()).true;
-    // });
+    it('should check that `Login` link redirects to `Login in Modal Window`', () => {
+      $(sel.logInLink).click();
+      expect($(sel.logInModalWindow).isDisplayed()).true;
+    });
+
+    it('should check that the button `Use Google Account` is clickable', () => {
+        expect($(sel.useGoogleAccBtn).isClickable());
+    });
+
 
     // it('should check that `Try for free` button in the main menu is clickable', () => {
     //   expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
