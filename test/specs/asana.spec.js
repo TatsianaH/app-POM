@@ -27,6 +27,7 @@ const sel = {
     phoneNumberContactSalesInput: '//input[@id="input_10"]',
     companySizeSelectBox:'//select[@id="input_15"]',
     evaluationSizeSelectBox: '//select[@id="input_16"]',
+    discussTextArea: '//textarea[@id="input_8"]',
     submitBtnContactSalesPage: '//button[@id="input_2"]',
     useGoogleAccBtn: '//button[@title="useGoogleAccBtn"]',
     emailLogInModalWindow: '//input[@id="login-form-modal-login"]',
@@ -43,6 +44,7 @@ const data = {
     lastName: faker.name.lastName(),
     phoneNumber: faker.phone.phoneNumber(),
     email: faker.internet.email(),
+    password: faker.random.words(1),
 };
 
 const urls = {
@@ -192,7 +194,7 @@ describe('Asana website', () => {
     });
 
     it('should add value to `discuss`field', () => {
-        $(sel.companyEmailContactSalesInput).addValue(data.discussText);
+        $(sel.discussTextArea).addValue(data.discussText);
     });
 
     it('should check that `Submit` button is clickable', () => {
@@ -219,7 +221,17 @@ describe('Asana website', () => {
         expect($(sel.useGoogleAccBtn).isClickable());
     });
 
+    it('should fill the `email` filed in `LogIn` modal window', () => {
+        $(sel.emailLogInModalWindow).addValue(data.email);
+    });
 
+    it('should fill the `password` filed in `LogIn` modal window', () => {
+        $(sel.passwordLogInModalWindow).addValue(data.password);
+    });
+
+    it('should check that `Log In` button in `LogIn` modal window is clickable', () => {
+        expect($(sel.logInBtnModalWindow).isClickable());
+    });
     // it('should check that `Try for free` button in the main menu is clickable', () => {
     //   expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
     // });
