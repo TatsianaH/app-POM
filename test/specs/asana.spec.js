@@ -201,10 +201,12 @@ describe('Asana website', () => {
         expect($(sel.submitBtnContactSalesPage).isClickable());
     });
 
+it('should return to main page', () => {
 
+});
     it('should redirect to home page', () => {
-      $(sel.logo).click();
-      expect(browser.getUrl()).eq(urls.asanaLogo);
+        $(sel.logo).click();
+        expect(browser.getUrl()).eq(urls.asanaLogo);
     });
 
     // it('should redirect to home page', () => {
@@ -213,8 +215,8 @@ describe('Asana website', () => {
     // });
 
     it('should check that `Login` link redirects to `Login in Modal Window`', () => {
-      $(sel.logInLink).click();
-      expect($(sel.logInModalWindow).isDisplayed()).true;
+        $(sel.logInLink).click();
+        expect($(sel.logInModalWindow).isDisplayed()).true;
     });
 
     it('should check that the button `Use Google Account` is clickable', () => {
