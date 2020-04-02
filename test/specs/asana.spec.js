@@ -195,15 +195,26 @@ describe('Asana website', () => {
 
     it('should add value to `discuss`field', () => {
         $(sel.discussTextArea).addValue(data.discussText);
+        browser.keys('Tab');
     });
 
     it('should check that `Submit` button is clickable', () => {
         expect($(sel.submitBtnContactSalesPage).isClickable());
     });
 
-it('should return to main page', () => {
 
-});
+    // check the chart
+
+    it('should return to main page', () => {
+        browser.switchToFrame('//iframe[@id="drift-widget"]');
+        // expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
+
+    it('should click to chart icon', () => {
+        $('//button[@id="widgetButton"]').click();
+        $('//div[@class="messenger-content"]').isDisplayed();
+    });
+
     it('should redirect to home page', () => {
         $(sel.logo).click();
         expect(browser.getUrl()).eq(urls.asanaLogo);
@@ -216,6 +227,7 @@ it('should return to main page', () => {
 
     it('should check that `Login` link redirects to `Login in Modal Window`', () => {
         $(sel.logInLink).click();
+        browser.pause(300);
         expect($(sel.logInModalWindow).isDisplayed()).true;
     });
 
