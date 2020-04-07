@@ -39,7 +39,7 @@ const data = {
     headerText: ['Keep your team organized and connected', 'Make more time for the work that matters most'],
     url: 'https://asana.com',
     discussText: faker.random.words(5),
-    contactSalesUrl: 'https://asana.com/sales',
+    contactSalesUrl: 'https://asana.com/sales?language=en',
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     phoneNumber: faker.phone.phoneNumber(),
@@ -50,7 +50,7 @@ const data = {
 const urls = {
     pricingUrl: 'https://asana.com/pricing',
     asanaLogo: 'https://asana.com/?noredirect',
-    contactSalesUrl: 'https://asana.com/sales',
+    contactSalesUrl: 'https://asana.com/sales?language=en',
     logInUrl: 'https://asana.com/?noredirect#login',
     freeAccountCreate: 'https://asana.com/create-account',
 };
@@ -207,12 +207,16 @@ describe('Asana website', () => {
 
     it('should return to main page', () => {
         browser.switchToFrame('//iframe[@id="drift-widget"]');
-        // expect(browser.getUrl()).eq(urls.asanaLogo);
+        expect($('//button[@id="widgetButton"]').isClickable());
     });
 
     it('should click to chart icon', () => {
         $('//button[@id="widgetButton"]').click();
         $('//div[@class="messenger-content"]').isDisplayed();
+    });
+
+    it('should switch to main frame', () => {
+        browser.switchToParentFrame();
     });
 
     it('should redirect to home page', () => {
