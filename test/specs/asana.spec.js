@@ -232,12 +232,13 @@ describe('Asana website', () => {
 
     it('should switch to main frame', () => {
         browser.switchToFrame(null);
+        browser.pause(500);
     });
 
-    // it('should redirect to home page', () => {
-    //     $(sel.logo).click();
-    //     expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
+    it('should redirect to home page', () => {
+        $(sel.logo).click();
+        expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
 
     // it('should redirect to home page', () => {
     //   $(sel.logo).click();
@@ -274,7 +275,7 @@ describe('Asana website', () => {
     it('go back to `LOG IN` page', () => {
       browser.back();
         browser.pause(300);
-      expect(browser.getUrl()).eq(urls.loginUrlBack);
+      expect(browser.getUrl()).eq(urls.logInUrl);
     });
 
     it('should redirect to `Sigh Up` page', () => {
@@ -285,7 +286,7 @@ describe('Asana website', () => {
     it('go back to `LOG IN` page', () => {
         browser.back();
         browser.pause(300);
-        expect(browser.getUrl()).eq(urls.loginUrlBack);
+        expect(browser.getUrl()).eq(urls.logInUrl);
     });
 
     it('should close `Log in` modal window', () => {
