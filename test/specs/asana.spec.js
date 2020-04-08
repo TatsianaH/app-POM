@@ -164,7 +164,7 @@ describe('Asana website', () => {
 
     it('should switch to iframe', () =>{
         browser.switchToFrame($(sel.contactSalesFrame));
-        console.log($(sel.contactSalesHeader));
+        console.log($(sel.contactSalesHeader).getText());
         expect($(sel.contactSalesHeader).getText()).eq('Talk with our sales team');
     });
 
@@ -202,54 +202,72 @@ describe('Asana website', () => {
         expect($(sel.submitBtnContactSalesPage).isClickable());
     });
 
-
+    it('should switch to page level', () => {
+        browser.switchToParentFrame();
+        browser.pause(2000);
+    });
     // check the chart
 
+    ///html//iframe[@id="drift-widget"]
     it('should return to main page', () => {
-        browser.switchToFrame('//iframe[@id="drift-widget"]');
+        browser.switchToFrame('drift-widget');
+
+    });
+
+    it('should check that chart - button is displayed', () => {
         expect($('//button[@id="widgetButton"]').isClickable());
     });
 
     it('should click to chart icon', () => {
         $('//button[@id="widgetButton"]').click();
-        $('//div[@class="messenger-content"]').isDisplayed();
+        expect($('//div[@class="messenger-content"]').isDisplayed());
     });
 
     it('should switch to main frame', () => {
-        browser.switchToParentFrame();
+        browser.switchToFrame(null);
     });
 
-    it('should redirect to home page', () => {
-        $(sel.logo).click();
-        expect(browser.getUrl()).eq(urls.asanaLogo);
-    });
+    // it('should redirect to home page', () => {
+    //     $(sel.logo).click();
+    //     expect(browser.getUrl()).eq(urls.asanaLogo);
+    // });
 
     // it('should redirect to home page', () => {
     //   $(sel.logo).click();
     //   expect(browser.getUrl()).eq(urls.asanaLogo);
     // });
 
-    it('should check that `Login` link redirects to `Login in Modal Window`', () => {
-        $(sel.logInLink).click();
-        browser.pause(300);
-        expect($(sel.logInModalWindow).isDisplayed()).true;
-    });
 
-    it('should check that the button `Use Google Account` is clickable', () => {
-        expect($(sel.useGoogleAccBtn).isClickable());
-    });
 
-    it('should fill the `email` filed in `LogIn` modal window', () => {
-        $(sel.emailLogInModalWindow).addValue(data.email);
-    });
 
-    it('should fill the `password` filed in `LogIn` modal window', () => {
-        $(sel.passwordLogInModalWindow).addValue(data.password);
-    });
 
-    it('should check that `Log In` button in `LogIn` modal window is clickable', () => {
-        expect($(sel.logInBtnModalWindow).isClickable());
-    });
+
+
+    // it('should check that `Login` link redirects to `Login in Modal Window`', () => {
+    //     $(sel.logInLink).click();
+    //     browser.pause(300);
+    //     expect($(sel.logInModalWindow).isDisplayed()).true;
+    // });
+    //
+    // it('should check that the button `Use Google Account` is clickable', () => {
+    //     expect($(sel.useGoogleAccBtn).isClickable());
+    // });
+    //
+    // it('should fill the `email` filed in `LogIn` modal window', () => {
+    //     $(sel.emailLogInModalWindow).addValue(data.email);
+    // });
+    //
+    // it('should fill the `password` filed in `LogIn` modal window', () => {
+    //     $(sel.passwordLogInModalWindow).addValue(data.password);
+    // });
+    //
+    // it('should check that `Log In` button in `LogIn` modal window is clickable', () => {
+    //     expect($(sel.logInBtnModalWindow).isClickable());
+    // });
+
+
+
+
     // it('should check that `Try for free` button in the main menu is clickable', () => {
     //   expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
     // });
