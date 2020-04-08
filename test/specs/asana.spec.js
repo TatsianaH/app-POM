@@ -215,7 +215,7 @@ describe('Asana website', () => {
     });
     // check the chart
 
-   // switch to iframe by id
+    // switch to iframe by id
     it('should return to main page', () => {
         browser.switchToFrame('drift-widget');
 
@@ -273,9 +273,9 @@ describe('Asana website', () => {
     });
 
     it('go back to `LOG IN` page', () => {
-      browser.back();
+        browser.back();
         browser.pause(300);
-      expect(browser.getUrl()).eq(urls.logInUrl);
+        expect(browser.getUrl()).eq(urls.logInUrl);
     });
 
     it('should redirect to `Sigh Up` page', () => {
