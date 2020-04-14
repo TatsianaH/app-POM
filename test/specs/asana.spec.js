@@ -36,6 +36,8 @@ const sel = {
     forgotPasswordLinkModalWindow: '//div[@id="loginForm-modal-login"]//a[@href="https://app.asana.com/-/forgot_password"]',
     sighUpLinkModalWindow: '//div[@id="login"]//a[@href="/create-account"]',
     closeModalWindow: '//div[@id="login"]//a[@aria-label="close"]',
+    chartBtn: '//button[@id="widgetButton"]',
+    chartMessenger: '//div[@class="messenger-content"]',
 };
 
 const data = {
@@ -213,7 +215,6 @@ describe('Asana website', () => {
         browser.switchToParentFrame();
         browser.pause(2000);
     });
-    // check the chart
 
     // switch to iframe by id
     it('should return to main page', () => {
@@ -222,12 +223,12 @@ describe('Asana website', () => {
     });
 
     it('should check that chart - button is displayed', () => {
-        expect($('//button[@id="widgetButton"]').isClickable());
+        expect($(sel.chartBtn).isClickable());
     });
 
     it('should click to chart icon', () => {
-        $('//button[@id="widgetButton"]').click();
-        expect($('//div[@class="messenger-content"]').isDisplayed());
+        $(sel.chartBtn).click();
+        expect($(sel.chartMessenger).isDisplayed());
     });
 
     it('should switch to main frame', () => {
@@ -239,11 +240,6 @@ describe('Asana website', () => {
         $(sel.logo).click();
         expect(browser.getUrl()).eq(urls.asanaLogo);
     });
-
-    // it('should redirect to home page', () => {
-    //   $(sel.logo).click();
-    //   expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
 
     it('should check that `Login` link redirects to `Login in Modal Window`', () => {
         $(sel.logInLink).click();
