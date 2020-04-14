@@ -17,7 +17,7 @@ const sel = {
     contactSalesLink: '//a[contains(@class, "contact-sales")]',
     logInLink: '//a[@class="navigation__link navigation__sign-in hidden-logged-in"]',
     logInHeaderModalWindow: '//div[@id="login"]//h3',
-    tryForFreeBtnSideMenu: '//div[contains(@class, "siteHeader-buttons")]/a[text()="Try for free"]',
+    tryForFreeBtnSideMenu: '//div[contains(@class, "siteHeader-buttons")]//a[@href="/create-account"]',
     tryForFreeBtnContainer: '//div[@class="container"]//a[@title="Try for free"][1]',
     tryForFreeBtnBottom: '//div[@class="textStack"]//a[@title="Try for free"][1]',
     contactSalesFrame: '//iframe[@id="71355782499168"]',
@@ -294,50 +294,45 @@ describe('Asana website', () => {
         $(sel.closeModalWindow).click();
         expect($(sel.header).getText()).to.be.oneOf(data.headerText);
     });
-    // it('should check that `Try for free` button in the main menu is clickable', () => {
-    //   expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
-    // });
-    //
-    // it('should check the `Try for free` button in the main menu redirects to proper page', async () => {
-    //   //$(sel.tryForFreeBtnSideMenu).click();
-    //   const text = $(sel.tryForFreeBtnSideMenu).getAttribute('href')
-    //   console.log();
-    //   const actual = await checkUrl(urls.freeAccountCreate);
-    //   expect(actual).eq(200);
-    // });
-    //
-    // it('should redirect to home page', () => {
-    //   $(sel.logo).click();
-    //   expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
-    //
-    // it('should check that `Try for free` button in the middle of the page is clickable', () => {
-    //   expect ($(sel.tryForFreeBtnContainer).isClickable()).true;
-    // });
-    //
-    // it('should check the `Try for free` button in the middle of the page redirects to proper page', async () => {
-    //   //$(sel.tryForFreeBtnContainer).click();
-    //   const actual = await checkUrl(urls.freeAccountCreate);
-    //   expect(actual).eq(200);
-    // });
-    //
-    // it('should redirect to home page', () => {
-    //   $(sel.logo).click();
-    //   expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
-    //
-    // it('should check that `Try for free` button in the bottom of the page is clickable', () => {
-    //   expect ($(sel.tryForFreeBtnBottom).isClickable()).true;
-    // });
-    //
-    // it('should check the `Try for free` button in the bottom of the page redirects to proper page', async () => {
-    //   //$(sel.tryForFreeBtnBottom).click();
-    //   const actual = await checkUrl(urls.tryForFreeBtnBottom);
-    //   expect(actual).eq(200);
-    // });
-    //
-    // it('should redirect to home page', () => {
-    //   $(sel.logo).click();
-    //   expect(browser.getUrl()).eq(urls.asanaLogo);
-    // });
+    it('should check that `Try for free` button in the main menu is clickable', () => {
+        expect ($(sel.tryForFreeBtnSideMenu).isClickable()).true;
+    });
+
+    it('should check the `Try for free` button in the main menu redirects to proper page', () => {
+        $(sel.tryForFreeBtnSideMenu).click();
+        expect(browser.getUrl()).eq(urls.signUp);
+    });
+
+    it('should redirect to home page', () => {
+        $(sel.logo).click();
+        expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
+
+    it('should check that `Try for free` button in the middle of the page is clickable', () => {
+        expect ($(sel.tryForFreeBtnContainer).isClickable()).true;
+    });
+
+    it('should check the `Try for free` button in the middle of the page redirects to proper page', () => {
+        $(sel.tryForFreeBtnContainer).click();
+        expect(browser.getUrl()).eq(urls.signUp);
+    });
+
+    it('should redirect to home page', () => {
+        $(sel.logo).click();
+        expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
+
+    it('should check that `Try for free` button in the bottom of the page is clickable', () => {
+        expect ($(sel.tryForFreeBtnBottom).isClickable()).true;
+    });
+
+    it('should check the `Try for free` button in the bottom of the page redirects to proper page', () => {
+        $(sel.tryForFreeBtnBottom).click();
+        expect(browser.getUrl()).eq(urls.signUp);
+    });
+
+    it('should redirect to home page', () => {
+        $(sel.logo).click();
+        expect(browser.getUrl()).eq(urls.asanaLogo);
+    });
 });
