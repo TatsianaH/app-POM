@@ -279,6 +279,7 @@ describe('Asana website', () => {
     });
 
     it('should redirect to `Sigh Up` page', () => {
+        $(sel.sighUpLinkModalWindow).scrollIntoView();
         $(sel.sighUpLinkModalWindow).click();
         expect(browser.getUrl()).eq(urls.signUp);
     });
